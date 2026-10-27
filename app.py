@@ -7,7 +7,7 @@ import time
 
 app = Flask(__name__)
 
-# Ye 4 lines Render se cookies utha kar file banayengi
+# Render se cookies utha kar file banayengi
 if os.environ.get('YOUTUBE_COOKIES'):
     with open('youtube-cookies.txt', 'w') as f:
         f.write(os.environ.get('YOUTUBE_COOKIES'))
@@ -15,7 +15,6 @@ if os.environ.get('YOUTUBE_COOKIES'):
 DOWNLOAD_DIR = "downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-# Background mein video download karne ka function (Agar direct link na mile toh)
 def download_task(url, filename, download_type):
     try:
         ydl_opts = {
@@ -25,10 +24,10 @@ def download_task(url, filename, download_type):
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
             'outtmpl': filename,
-            # Yahan 'web' aur 'android' ke sath po_token add kiya hai
+            # Yahan client ko badla hai taake PO token flow trigger ho
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['web', 'android'],
+                    'player_client': ['mweb', 'tv', 'web_safari'],
                     'po_token': ['bgutil:web+android']
                 }
             },
@@ -57,7 +56,6 @@ def download():
     if not url:
         return jsonify({'error': 'URL missing'}), 400
 
-    # Video ID nikaalne ki koshish karein (Thumbnail ke liye)
     video_id = ""
     if "v=" in url:
         video_id = url.split("v=")[1].split("&")[0]
@@ -65,18 +63,16 @@ def download():
         video_id = url.split("youtu.be/")[1].split("?")[0]
 
     try:
-        # STEP 1: Pehle check karein ke kya humein DIRECT LINK mil sakta hai?
         ydl_opts_direct = {
             'quiet': True,
             'no_warnings': True,
             'nocheckcertificate': True,
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
-            # Yahan bhi po_token add kiya hai
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android', 'ios'],
-                    'po_token': ['bgutil:android']
+                    'player_client': ['mweb', 'tv'],
+                    'po_token': ['bgutil:web+android']
                 }
             },
         }
@@ -91,13 +87,11 @@ def download():
             direct_url = None
             
             if 'formats' in info:
-                # Aisi file dhoondein jisme video aur audio dono hon
                 valid_formats = [f for f in info['formats'] if f.get('vcodec') != 'none' and f.get('acodec') != 'none']
                 if valid_formats:
                     direct_url = valid_formats[-1].get('url')
 
             if direct_url:
-                # Agar direct link mil gaya, toh foran user ko bhej dein!
                 return jsonify({
                     'success': True, 
                     'type': 'direct',
@@ -108,7 +102,6 @@ def download():
     except Exception as e:
         print(f"Direct Link Check Failed: {e}. Falling back to server download...")
 
-    # STEP 2: Agar direct link nahi mila, toh Server par download karein
     unique_id = str(uuid.uuid4())[:6]
     filename = os.path.join(DOWNLOAD_DIR, f'{unique_id}.mp4')
 
@@ -127,10 +120,8 @@ def download():
 def get_file(filename):
     filepath = os.path.join(DOWNLOAD_DIR, filename)
     
-    # Server par download hone ka wait karein
-    for _ in range(90): # 90 seconds tak wait karega
+    for _ in range(90):
         if os.path.exists(filepath) and os.path.getsize(filepath) > 0:
-            # File ready hai
             time.sleep(1) 
             break
         time.sleep(1)
@@ -138,16 +129,7 @@ def get_file(filename):
     if os.path.exists(filepath):
         return send_file(filepath, as_attachment=True)
     
-    # Agar file nahi bani, toh error page return karein
-    return """
-    <html>
-        <body style="text-align: center; padding-top: 50px; font-family: sans-serif;">
-            <h2 style="color: red;">Download Failed</h2>
-            <p>YouTube blocked the server download. Please try again or use a different video.</p>
-            <a href="/" style="padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">Go Back</a>
-        </body>
-    </html>
-    """, 404
+    return "File processing failed. YouTube blocked the request.", 404
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
