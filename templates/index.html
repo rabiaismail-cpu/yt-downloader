@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- ========================================== -->
+    <!-- MASSIVE SEO TAGS FOR GOOGLE RANKING        -->
+    <!-- ========================================== -->
+    <title>Downloader.io - Fast & Free YouTube Video, Shorts & MP3 Downloader</title>
+    <meta name="description" content="Download YouTube videos in high-quality HD, Shorts, and MP3 for free. Fast, secure, and no registration required. The best online YouTube downloader.">
+    <meta name="keywords" content="youtube downloader, download youtube videos, youtube shorts downloader, youtube mp3 converter, hd video downloader, savefrom alternative, y2mate">
+    <meta name="author" content="Downloader.io">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph for Facebook/WhatsApp -->
+    <meta property="og:title" content="Downloader.io - Fast & Free YouTube Downloader">
+    <meta property="og:description" content="Download YouTube videos in HD, Shorts, and MP3 for free. Fast and secure.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://downloader.io">
+    <meta property="og:image" content="https://downloader.io/preview.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Downloader.io - YouTube Downloader">
+    <meta name="twitter:description" content="Download YouTube videos in HD for free.">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: #f9fbfd; color: #333; line-height: 1.6; overflow-x: hidden; }
+        
+        /* HEADER */
+        header { background: #fff; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 28px; font-weight: 800; color: #111; display: flex; align-items: center; gap: 10px; cursor: pointer; width: 250px;}
+        .logo i { color: #ff0000; font-size: 34px; }
+        .header-center { display: flex; gap: 15px; align-items: center; justify-content: center; flex: 1; }
+        .header-center a { font-size: 16px; font-weight: 700; color: #555; display: flex; align-items: center; gap: 8px; transition: 0.3s; padding: 10px 20px; border-radius: 12px; border: 2px solid transparent; cursor: pointer; }
+        .header-center a:hover { color: #ff0000; background: #fff0f0; }
+        .header-center a.active { border-color: #111; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .header-right { width: 250px; text-align: right; display: flex; gap: 20px; justify-content: flex-end; }
+        .header-right a { font-weight: 600; color: #555; font-size: 15px; cursor: pointer; transition: 0.3s; }
+        .header-right a:hover { color: #ff0000; }
+        .header-right a.active { color: #ff0000; font-weight: 800; }
+
+        /* PAGE VIEWS */
+        .page-view { display: none; animation: fadeIn 0.4s ease; }
+        .page-view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* HERO SECTION */
+        .hero { text-align: center; padding: 80px 20px 50px; background: linear-gradient(180deg, #ffffff 0%, #f9fbfd 100%); }
+        .hero h1 { font-size: 48px; font-weight: 800; color: #111; margin-bottom: 20px; letter-spacing: -1px; }
+        .hero p { font-size: 20px; color: #666; margin-bottom: 40px; }
+
+        .search-box { max-width: 800px; margin: 0 auto; background: #fff; padding: 10px; border-radius: 50px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); display: flex; align-items: center; border: 1px solid #e0e0e0; }
+        .search-box input { flex: 1; padding: 18px 25px; border: none; outline: none; font-size: 18px; border-radius: 50px; }
+        .search-box button { padding: 18px 40px; background: #ff0000; color: white; border: none; border-radius: 50px; font-size: 18px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
+        .search-box button:hover { background: #cc0000; }
+
+        .quick-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 900px; margin: 30px auto 0; }
+        .action-btn { background: #e8f5e9; color: #2e7d32; padding: 12px 24px; border-radius: 8px; display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 15px; cursor: pointer; border: 1px solid #c8e6c9; transition: all 0.2s ease; }
+        .action-btn:hover { background: #c8e6c9; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15); }
+        .action-btn i { font-size: 18px; }
+
+        /* RESULT BOX */
+        #result-area { max-width: 800px; margin: 30px auto 0; display: none; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: left; border: 1px solid #ddd; }
+        .video-info { display: flex; gap: 20px; align-items: center; }
+        .video-info img { width: 160px; height: 90px; border-radius: 8px; object-fit: cover; background: #eee; }
+        .video-details h3 { font-size: 16px; margin-bottom: 10px; color: #111; }
+        .download-btn { display: inline-flex; align-items: center; gap: 10px; padding: 10px 25px; background: #28a745; color: white; border-radius: 5px; font-size: 16px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; }
+        .download-btn:hover { background: #218838; }
+        .loading-text { text-align: center; color: #007bff; font-weight: bold; padding: 20px; }
+        .error-text { text-align: center; color: #dc3545; font-weight: bold; padding: 20px; }
+
+        /* INFO SECTIONS (Lambi Website Ke Liye) */
+        .info-section { padding: 80px 5%; background: #fff; border-top: 1px solid #eee; }
+        .info-section.alt-bg { background: #f9fbfd; }
+        .section-title { font-size: 32px; text-align: center; margin-bottom: 50px; font-weight: 800; color: #111; }
+        .grid-container { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; }
+        .card { background: #fff; padding: 40px 30px; border-radius: 15px; width: 300px; text-align: center; border: 1px solid #eaeaea; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+        .card i { font-size: 45px; color: #ff0000; margin-bottom: 20px; }
+        .card h3 { font-size: 20px; margin-bottom: 10px; }
+        .card p { color: #666; font-size: 15px; }
+
+        /* Platforms */
+        .platform-icons { display: flex; justify-content: center; gap: 60px; font-size: 50px; margin-top: 20px; }
+        .platform-icons i { color: #bdc3c7; transition: 0.3s; }
+        .platform-icons i:hover { transform: scale(1.2); }
+
+        /* Steps */
+        .steps-container { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; text-align: center; }
+        .step { width: 250px; }
+        .step-icon { font-size: 40px; color: #ff0000; margin-bottom: 20px; background: #fff0f0; width: 80px; height: 80px; display: flex; justify-content: center; align-items: center; border-radius: 50%; margin: 0 auto 20px; }
+        .step h3 { font-size: 20px; margin-bottom: 10px; }
+        .step p { color: #666; font-size: 15px; }
+
+        /* Reviews */
+        .review-card { background: #fff; padding: 30px; border-radius: 15px; width: 320px; text-align: left; border: 1px solid #eaeaea; }
+        .stars { color: #f1c40f; margin-bottom: 15px; }
+        .review-text { font-size: 15px; color: #555; margin-bottom: 15px; font-style: italic; }
+        .reviewer { font-weight: 700; color: #111; font-size: 15px; }
+
+        /* FAQ */
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: #fff; padding: 25px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #eaeaea; box-shadow: 0 3px 10px rgba(0,0,0,0.02); }
+        .faq-item h4 { font-size: 18px; color: #111; margin-bottom: 10px; font-weight: 700; }
+        .faq-item p { color: #555; font-size: 15px; }
+
+        /* Text Pages */
+        .text-page { max-width: 800px; margin: 60px auto; background: #fff; padding: 50px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .text-page h1 { font-size: 36px; margin-bottom: 20px; color: #111; }
+        .text-page p { margin-bottom: 15px; color: #555; font-size: 16px; line-height: 1.8; }
+
+        footer { background: #111827; color: #9ca3af; padding: 60px 5% 30px; margin-top: 40px;}
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; max-width: 1200px; margin: 0 auto 40px; }
+        .footer-brand h3 { color: #fff; font-size: 24px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .footer-brand h3 i { color: #ff0000; }
+        .footer-brand p { max-width: 300px; font-size: 14px; }
+        .footer-links { display: flex; gap: 60px; }
+        .link-col h4 { color: #fff; font-size: 16px; margin-bottom: 20px; }
+        .link-col a { display: block; color: #9ca3af; font-size: 14px; margin-bottom: 12px; cursor: pointer; }
+        .link-col a:hover { color: #ff0000; }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid #374151; font-size: 14px; }
+
+        @media (max-width: 900px) {
+            header { flex-direction: column; gap: 15px; padding: 15px; }
+            .header-center, .header-right { width: 100%; justify-content: center; flex-wrap: wrap; }
+            .search-box { flex-direction: column; border-radius: 20px; padding: 15px; }
+            .search-box input { width: 100%; border: 1px solid #ddd; margin-bottom: 10px; }
+            .search-box button { width: 100%; justify-content: center; }
+            .footer-links { flex-direction: column; gap: 30px; }
+            .video-info { flex-direction: column; text-align: center; }
+            .hero h1 { font-size: 36px; }
+            .platform-icons { flex-wrap: wrap; gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="switchPage('video')"><i class="fab fa-youtube"></i> Downloader<span style="color:#ff0000">.io</span></div>
+        
+        <div class="header-center">
+            <a id="nav-video" class="active" onclick="switchPage('video')"><i class="fab fa-youtube" style="color:#ff0000;"></i> Video</a>
+            <a id="nav-mp4" onclick="switchPage('mp4')"><i class="fas fa-file-video" style="color:#d32f2f;"></i> MP4</a>
+            <a id="nav-shorts" onclick="switchPage('shorts')"><i class="fab fa-youtube" style="color:#f57c00;"></i> Shorts</a>
+            <a id="nav-mp3" onclick="switchPage('mp3')"><i class="fas fa-music" style="color:#1976d2;"></i> MP3</a>
+        </div>
+
+        <div class="header-right">
+            <a id="nav-home" onclick="switchPage('home')">Home</a>
+            <a id="nav-about" onclick="switchPage('about')">About Us</a>
+            <a id="nav-privacy" onclick="switchPage('privacy')">Privacy</a>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <!-- HOME PAGE -->
+        <div id="page-home" class="page-view">
+            <section class="hero">
+                <h1>Welcome to Downloader.io</h1>
+                <p>Select a format from the top menu to start downloading.</p>
+            </section>
+        </div>
+
+        <!-- ABOUT US PAGE -->
+        <div id="page-about" class="page-view">
+            <div class="text-page">
+                <h1>About Us</h1>
+                <p>Welcome to <strong>Downloader.io</strong>, the fastest and most reliable YouTube video downloader on the web.</p>
+                <p>Our mission is to provide users with a seamless, ad-free, and secure way to download their favorite YouTube videos, Shorts, and MP3s.</p>
+                <p>Founded in 2024, our team is dedicated to maintaining the fastest servers and the most up-to-date technology.</p>
+            </div>
+        </div>
+
+        <!-- PRIVACY PAGE -->
+        <div id="page-privacy" class="page-view">
+            <div class="text-page">
+                <h1>Privacy Policy</h1>
+                <p>Your privacy is important to us. It is Downloader.io's policy to respect your privacy regarding any information we may collect from you across our website.</p>
+                <p><strong>1. Information We Collect:</strong> We do not require you to create an account, and we do not store your download history.</p>
+                <p><strong>2. Cookies:</strong> We use essential cookies to improve your experience on our website. You can disable cookies in your browser settings.</p>
+            </div>
+        </div>
+
+        <!-- MAIN VIDEO PAGE (Yahan SEO Content Aur Lamba Layout Hai) -->
+        <div id="page-video" class="page-view active">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1>Download YouTube Videos</h1>
+                <p>Paste your video link below to get high-quality MP4 files.</p>
+                
+                <div class="search-box">
+                    <input type="text" id="urlInputVideo" placeholder="Paste YouTube link here...">
+                    <button id="btn-video" onclick="downloadMedia('video', 'urlInputVideo')"><i class="fas fa-download"></i> Download</button>
+                </div>
+                
+                <div class="quick-actions">
+                    <div class="action-btn" onclick="switchPage('video')"><i class="fab fa-youtube" style="color:red;"></i> YouTube</div>
+                    <div class="action-btn" onclick="switchPage('mp4')"><i class="fas fa-file-video" style="color:#d32f2f;"></i> YouTube Mp4</div>
+                    <div class="action-btn" onclick="switchPage('shorts')"><i class="fab fa-youtube" style="color:#f57c00;"></i> YouTube Shorts</div>
+                    <div class="action-btn" onclick="switchPage('mp3')"><i class="fas fa-music" style="color:#1976d2;"></i> YouTube Mp3</div>
+                </div>
+
+                <div id="result-area"></div>
+            </section>
+
+            <!-- SEO Sections Start Here (Isse Page Lamba Hoga) -->
+            
+            <section class="info-section alt-bg">
+                <h2 class="section-title">Works Seamlessly With</h2>
+                <div class="platform-icons">
+                    <i class="fab fa-youtube" style="color:#ff0000;"></i>
+                    <i class="fab fa-facebook"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-tiktok"></i>
+                </div>
+            </section>
+
+            <section class="info-section">
+                <h2 class="section-title">Why Choose Downloader.io?</h2>
+                <div class="grid-container">
+                    <div class="card">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Lightning Fast</h3>
+                        <p>Our optimized servers ensure you get your videos in just a few seconds without any waiting time.</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-video"></i>
+                        <h3>HD Quality</h3>
+                        <p>Download videos in crystal clear 1080p Full HD quality. We never compromise on your viewing experience.</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>100% Safe & Secure</h3>
+                        <p>No ads, no malware, and no tracking. Your privacy is our top priority. Download with peace of mind.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="info-section alt-bg">
+                <h2 class="section-title">How It Works</h2>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-icon"><i class="fas fa-link"></i></div>
+                        <h3>1. Copy Link</h3>
+                        <p>Open YouTube and copy the URL of the video you want to download.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon"><i class="fas fa-paste"></i></div>
+                        <h3>2. Paste URL</h3>
+                        <p>Come back to our website and paste the link into the search box.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon"><i class="fas fa-download"></i></div>
+                        <h3>3. Save Video</h3>
+                        <p>Click the Download button and save your favorite video to your device.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="info-section">
+                <h2 class="section-title">What Our Users Say</h2>
+                <div class="grid-container">
+                    <div class="review-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="review-text">"Fastest downloader I've ever used! I download music videos daily without any issues."</p>
+                        <div class="reviewer">- Ali R.</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="review-text">"Clean interface, no annoying popups. The 1080p quality is perfect for my projects."</p>
+                        <div class="reviewer">- Sarah K.</div>
+                    </div>
+                    <div class="review-card">
+                        <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                        <p class="review-text">"I love how easily it downloads YouTube Shorts. Highly recommended for everyone!"</p>
+                        <div class="reviewer">- Hamza M.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="info-section alt-bg">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <h4>Is this YouTube downloader free to use?</h4>
+                        <p>Yes, Downloader.io is completely free. You can download unlimited videos without paying anything.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Do I need to install any software?</h4>
+                        <p>No. Our tool works entirely online in your web browser. No software installation is required.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I download YouTube Shorts?</h4>
+                        <p>Absolutely! Just copy the Shorts link and paste it into the search box. It will download in high quality.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Is it legal to download YouTube videos?</h4>
+                        <p>Downloading videos for personal, offline use is generally acceptable. However, you should not re-upload copyrighted content.</p>
+                    </div>
+                </div>
+            </section>
+            <!-- SEO Sections End -->
+        </div>
+
+        <!-- MP4 PAGE -->
+        <div id="page-mp4" class="page-view">
+            <section class="hero">
+                <h1>Download YouTube MP4</h1>
+                <p>Convert and download videos directly in MP4 format.</p>
+                <div class="search-box">
+                    <input type="text" id="urlInputMp4" placeholder="Paste YouTube link here...">
+                    <button id="btn-mp4" onclick="downloadMedia('video', 'urlInputMp4')"><i class="fas fa-download"></i> Download MP4</button>
+                </div>
+                <div id="result-area-mp4" class="result-area" style="display:none; max-width:800px; margin:30px auto 0; background:white; padding:20px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:left; border:1px solid #ddd;"></div>
+            </section>
+        </div>
+
+        <!-- SHORTS PAGE -->
+        <div id="page-shorts" class="page-view">
+            <section class="hero">
+                <h1>Download YouTube Shorts</h1>
+                <p>Save your favorite Shorts without any watermarks.</p>
+                <div class="search-box">
+                    <input type="text" id="urlInputShorts" placeholder="Paste Shorts link here...">
+                    <button id="btn-shorts" onclick="downloadMedia('video', 'urlInputShorts')"><i class="fas fa-download"></i> Download Shorts</button>
+                </div>
+                <div id="result-area-shorts" class="result-area" style="display:none; max-width:800px; margin:30px auto 0; background:white; padding:20px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:left; border:1px solid #ddd;"></div>
+            </section>
+        </div>
+
+        <!-- MP3 PAGE -->
+        <div id="page-mp3" class="page-view">
+            <section class="hero">
+                <h1>Download YouTube MP3</h1>
+                <p>Extract high-quality audio from any YouTube video.</p>
+                <div class="search-box">
+                    <input type="text" id="urlInputMp3" placeholder="Paste YouTube link here...">
+                    <button id="btn-mp3" onclick="downloadMedia('audio', 'urlInputMp3')"><i class="fas fa-music"></i> Download MP3</button>
+                </div>
+                <div id="result-area-mp3" class="result-area" style="display:none; max-width:800px; margin:30px auto 0; background:white; padding:20px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:left; border:1px solid #ddd;"></div>
+            </section>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3><i class="fab fa-youtube"></i> Downloader.io</h3>
+                <p>The best online tool to download YouTube videos, Shorts, and MP3 in high quality for free.</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-col">
+                    <h4>Tools</h4>
+                    <a onclick="switchPage('video')">Video Downloader</a>
+                    <a onclick="switchPage('mp4')">MP4 Downloader</a>
+                    <a onclick="switchPage('shorts')">Shorts Downloader</a>
+                    <a onclick="switchPage('mp3')">MP3 Converter</a>
+                </div>
+                <div class="link-col">
+                    <h4>Legal</h4>
+                    <a onclick="switchPage('privacy')">Privacy Policy</a>
+                    <a onclick="switchPage('about')">About Us</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Downloader.io - All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+            if(document.getElementById('page-' + pageId)) {
+                document.getElementById('page-' + pageId).classList.add('active');
+            }
+            
+            document.querySelectorAll('.header-center a').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.header-right a').forEach(l => l.classList.remove('active'));
+            
+            if(document.getElementById('nav-' + pageId)) {
+                document.getElementById('nav-' + pageId).classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        async function downloadMedia(type, inputId) {
+            const url = document.getElementById(inputId).value.trim();
+            
+            let resultArea;
+            if(inputId === 'urlInputVideo') resultArea = document.getElementById('result-area');
+            else if(inputId === 'urlInputMp4') resultArea = document.getElementById('result-area-mp4');
+            else if(inputId === 'urlInputShorts') resultArea = document.getElementById('result-area-shorts');
+            else if(inputId === 'urlInputMp3') resultArea = document.getElementById('result-area-mp3');
+            
+            const btn = event.target;
+
+            if (!url) {
+                resultArea.style.display = 'block';
+                resultArea.innerHTML = '<p class="error-text">Please paste a YouTube link first!</p>';
+                return;
+            }
+
+            resultArea.style.display = 'block';
+            resultArea.innerHTML = '<div class="loading-text"><i class="fas fa-spinner fa-spin"></i> Processing link, please wait...</div>';
+            const origHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wait...';
+
+            try {
+                const response = await fetch('/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url, type: type })
+                });
+
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+
+                let btnText = type === 'audio' ? 'Download MP3' : 'Download Video (MP4)';
+                
+                resultArea.innerHTML = `
+                    <div class="video-info">
+                        <img src="${data.thumbnail || 'https://via.placeholder.com/160x90?text=No+Image'}" alt="Thumbnail">
+                        <div class="video-details">
+                            <h3>YouTube Video</h3>
+                            <p style="font-size:12px; margin-bottom:10px; color:#666;">Download in High Quality</p>
+                            <a href="${data.download_url}" class="download-btn" target="_self">
+                                <i class="fas fa-download"></i> ${btnText}
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+            } catch (error) {
+                resultArea.innerHTML = `<p class="error-text"><i class="fas fa-times-circle"></i> Error: ${error.message}</p>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origHTML;
+            }
+        }
+    </script>
+</body>
+</html>
