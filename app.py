@@ -15,6 +15,7 @@ if os.environ.get('YOUTUBE_COOKIES'):
 DOWNLOAD_DIR = "downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
+# Background mein video download karne ka function
 def download_task(url, filename, download_type):
     try:
         ydl_opts = {
@@ -24,7 +25,7 @@ def download_task(url, filename, download_type):
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
             'outtmpl': filename,
-            # Yahan client ko badla hai taake PO token flow trigger ho
+            # Yahan player_client ko update kiya hai
             'extractor_args': {
                 'youtube': {
                     'player_client': ['mweb', 'tv', 'web_safari'],
@@ -63,12 +64,14 @@ def download():
         video_id = url.split("youtu.be/")[1].split("?")[0]
 
     try:
+        # STEP 1: Direct link check
         ydl_opts_direct = {
             'quiet': True,
             'no_warnings': True,
             'nocheckcertificate': True,
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
+            # Yahan bhi player_client update kiya hai
             'extractor_args': {
                 'youtube': {
                     'player_client': ['mweb', 'tv'],
@@ -102,6 +105,7 @@ def download():
     except Exception as e:
         print(f"Direct Link Check Failed: {e}. Falling back to server download...")
 
+    # STEP 2: Server par download
     unique_id = str(uuid.uuid4())[:6]
     filename = os.path.join(DOWNLOAD_DIR, f'{unique_id}.mp4')
 
