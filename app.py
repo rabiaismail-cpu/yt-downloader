@@ -25,11 +25,13 @@ def download_task(url, filename, download_type):
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
             'outtmpl': filename,
-            # Yahan clients ko update kiya hai taake PO token flow trigger ho
+            # Yahan PO Token provider ka base_url set karna zaroori hai
             'extractor_args': {
                 'youtube': {
                     'player_client': ['mweb', 'tv', 'web_safari'],
-                    'po_token': ['bgutil:web+android']
+                },
+                'youtubepot-bgutilhttp': {
+                    'base_url': ['http://127.0.0.1:4416']
                 }
             },
         }
@@ -57,9 +59,9 @@ def download():
     if not url:
         return jsonify({'error': 'URL missing'}), 400
 
-    # Check karein ke URL YouTube ka hai ya nahi
+    # Check karein ke URL YouTube ka hai ya nahi (Render link nahi)
     if "youtube.com" not in url and "youtu.be" not in url:
-        return jsonify({'error': 'Please paste a valid YouTube link, not a Render link.'}), 400
+        return jsonify({'error': 'Please paste a valid YouTube link.'}), 400
 
     video_id = ""
     if "v=" in url:
@@ -68,18 +70,19 @@ def download():
         video_id = url.split("youtu.be/")[1].split("?")[0]
 
     try:
-        # STEP 1: Direct link check
+        # STEP 1: Direct link check (Sirf fast direct link ke liye)
         ydl_opts_direct = {
             'quiet': True,
             'no_warnings': True,
             'nocheckcertificate': True,
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
-            # Yahan bhi clients ko update kiya hai
             'extractor_args': {
                 'youtube': {
                     'player_client': ['mweb', 'tv'],
-                    'po_token': ['bgutil:web+android']
+                },
+                'youtubepot-bgutilhttp': {
+                    'base_url': ['http://127.0.0.1:4416']
                 }
             },
         }
@@ -109,7 +112,7 @@ def download():
     except Exception as e:
         print(f"Direct Link Check Failed: {e}. Falling back to server download...")
 
-    # STEP 2: Server par download
+    # STEP 2: Server par download (Background)
     unique_id = str(uuid.uuid4())[:6]
     filename = os.path.join(DOWNLOAD_DIR, f'{unique_id}.mp4')
 
