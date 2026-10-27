@@ -25,7 +25,7 @@ def download_task(url, filename, download_type):
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
             'outtmpl': filename,
-            # Yahan player_client ko update kiya hai
+            # Yahan clients ko update kiya hai taake PO token flow trigger ho
             'extractor_args': {
                 'youtube': {
                     'player_client': ['mweb', 'tv', 'web_safari'],
@@ -57,6 +57,10 @@ def download():
     if not url:
         return jsonify({'error': 'URL missing'}), 400
 
+    # Check karein ke URL YouTube ka hai ya nahi
+    if "youtube.com" not in url and "youtu.be" not in url:
+        return jsonify({'error': 'Please paste a valid YouTube link, not a Render link.'}), 400
+
     video_id = ""
     if "v=" in url:
         video_id = url.split("v=")[1].split("&")[0]
@@ -71,7 +75,7 @@ def download():
             'nocheckcertificate': True,
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
-            # Yahan bhi player_client update kiya hai
+            # Yahan bhi clients ko update kiya hai
             'extractor_args': {
                 'youtube': {
                     'player_client': ['mweb', 'tv'],
