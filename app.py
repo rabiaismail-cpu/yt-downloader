@@ -30,7 +30,6 @@ def download_task(url, filename, download_type):
         if download_type == 'audio':
             ydl_opts['format'] = 'bestaudio/best'
         else:
-            # HD Quality Force Download + Merge (Server side)
             ydl_opts['format'] = 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best'
             ydl_opts['merge_output_format'] = 'mp4'
 
@@ -60,21 +59,20 @@ def download():
         video_id = url.split("youtu.be/")[1].split("?")[0]
 
     try:
-        # STEP 1: FAST DIRECT LINK (Sabse tez tareeqa)
+        # STEP 1: Pehle check karein ke kya humein DIRECT LINK mil sakta hai?
+        # (Ye bohot fast hota hai aur mostly block nahi hota)
         ydl_opts_direct = {
             'quiet': True,
             'no_warnings': True,
             'nocheckcertificate': True,
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
-            # Yahan hum 'android' aur 'ios' use kar rahe hain jo fast HD MP4 link dete hain
             'extractor_args': {'youtube': {'player_client': ['android', 'ios']}},
         }
         
         if download_type == 'audio':
             ydl_opts_direct['format'] = 'bestaudio/best'
         else:
-            # 'best[ext=mp4]' direct ek single file ka link deta hai jisme audio pehle se hota hai
             ydl_opts_direct['format'] = 'best[ext=mp4]/best'
 
         with yt_dlp.YoutubeDL(ydl_opts_direct) as ydl:
@@ -82,15 +80,13 @@ def download():
             direct_url = None
             
             if 'formats' in info:
-                # Sirf woh formats dhoondein jisme video aur audio dono ek sath hon
+                # Aisi file dhoondein jisme video aur audio dono hon
                 valid_formats = [f for f in info['formats'] if f.get('vcodec') != 'none' and f.get('acodec') != 'none']
                 if valid_formats:
-                    # Sabse behtar quality wala format uthayen (720p tak direct milta hai)
-                    best_format = max(valid_formats, key=lambda f: f.get('height', 0) or 0)
-                    direct_url = best_format.get('url')
+                    direct_url = valid_formats[-1].get('url')
 
             if direct_url:
-                # Agar link mil gaya, toh foran wapas bhej dein (No wait)
+                # Agar direct link mil gaya, toh foran user ko bhej dein!
                 return jsonify({
                     'success': True, 
                     'type': 'direct',
@@ -99,9 +95,9 @@ def download():
                 })
 
     except Exception as e:
-        print(f"Direct Link Failed: {e}. Switching to background download...")
+        print(f"Direct Link Check Failed: {e}. Falling back to server download...")
 
-    # STEP 2: Agar direct link nahi mila, toh Server par download karein (Fallback)
+    # STEP 2: Agar direct link nahi mila, toh Server par download karein
     unique_id = str(uuid.uuid4())[:6]
     filename = os.path.join(DOWNLOAD_DIR, f'{unique_id}.mp4')
 
@@ -120,17 +116,27 @@ def download():
 def get_file(filename):
     filepath = os.path.join(DOWNLOAD_DIR, filename)
     
-    # Server par download hone ka wait (Agar direct fail ho jaye)
-    for _ in range(90): 
+    # Server par download hone ka wait karein
+    for _ in range(90): # 90 seconds tak wait karega
         if os.path.exists(filepath) and os.path.getsize(filepath) > 0:
-            time.sleep(1) 
+            # File ready hai
+            time.sleep(1) # Ek second ruk kar file ko complete hone dein
             break
         time.sleep(1)
 
     if os.path.exists(filepath):
         return send_file(filepath, as_attachment=True)
     
-    return "File processing failed. YouTube blocked the request.", 404
+    # Agar file nahi bani, toh error page return karein
+    return """
+    <html>
+        <body style="text-align: center; padding-top: 50px; font-family: sans-serif;">
+            <h2 style="color: red;">Download Failed</h2>
+            <p>YouTube blocked the server download. Please try again or use a different video.</p>
+            <a href="/" style="padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">Go Back</a>
+        </body>
+    </html>
+    """, 404
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
