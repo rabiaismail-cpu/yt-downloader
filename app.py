@@ -25,7 +25,13 @@ def download_task(url, filename, download_type):
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
             'outtmpl': filename,
-            'extractor_args': {'youtube': {'player_client': ['web', 'android']}},
+            # Yahan 'web' aur 'android' ke sath po_token add kiya hai
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['web', 'android'],
+                    'po_token': ['bgutil:web+android']
+                }
+            },
         }
         if download_type == 'audio':
             ydl_opts['format'] = 'bestaudio/best'
@@ -60,14 +66,19 @@ def download():
 
     try:
         # STEP 1: Pehle check karein ke kya humein DIRECT LINK mil sakta hai?
-        # (Ye bohot fast hota hai aur mostly block nahi hota)
         ydl_opts_direct = {
             'quiet': True,
             'no_warnings': True,
             'nocheckcertificate': True,
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
-            'extractor_args': {'youtube': {'player_client': ['android', 'ios']}},
+            # Yahan bhi po_token add kiya hai
+            'extractor_args': {
+                'youtube': {
+                    'player_client': ['android', 'ios'],
+                    'po_token': ['bgutil:android']
+                }
+            },
         }
         
         if download_type == 'audio':
@@ -120,7 +131,7 @@ def get_file(filename):
     for _ in range(90): # 90 seconds tak wait karega
         if os.path.exists(filepath) and os.path.getsize(filepath) > 0:
             # File ready hai
-            time.sleep(1) # Ek second ruk kar file ko complete hone dein
+            time.sleep(1) 
             break
         time.sleep(1)
 
