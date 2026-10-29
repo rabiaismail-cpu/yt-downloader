@@ -25,10 +25,10 @@ def download_task(url, filename, download_type):
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
             'outtmpl': filename,
-            # Yahan player_client ko 'android_vr' set kiya hai taake PO token flow trigger ho
+            # Yahan clients ko badla hai taake PO token flow trigger ho
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android_vr'],
+                    'player_client': ['mweb', 'tv', 'web_safari'],
                 },
                 'youtubepot-bgutilhttp': {
                     'base_url': ['http://127.0.0.1:4416']
@@ -79,7 +79,7 @@ def download():
             'cookiefile': 'youtube-cookies.txt',
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['android_vr'],
+                    'player_client': ['mweb', 'tv', 'web_safari'],
                 },
                 'youtubepot-bgutilhttp': {
                     'base_url': ['http://127.0.0.1:4416']
