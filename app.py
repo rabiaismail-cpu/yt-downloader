@@ -25,10 +25,10 @@ def download_task(url, filename, download_type):
             'js_runtimes': {'deno': {}},
             'cookiefile': 'youtube-cookies.txt',
             'outtmpl': filename,
-            # Yahan PO Token provider ka base_url set karna zaroori hai
+            # Yahan player_client ko 'android_vr' set kiya hai taake PO token flow trigger ho
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['mweb', 'tv', 'web_safari'],
+                    'player_client': ['android_vr'],
                 },
                 'youtubepot-bgutilhttp': {
                     'base_url': ['http://127.0.0.1:4416']
@@ -59,7 +59,7 @@ def download():
     if not url:
         return jsonify({'error': 'URL missing'}), 400
 
-    # Check karein ke URL YouTube ka hai ya nahi (Render link nahi)
+    # Check karein ke URL YouTube ka hai ya nahi
     if "youtube.com" not in url and "youtu.be" not in url:
         return jsonify({'error': 'Please paste a valid YouTube link.'}), 400
 
@@ -79,7 +79,7 @@ def download():
             'cookiefile': 'youtube-cookies.txt',
             'extractor_args': {
                 'youtube': {
-                    'player_client': ['mweb', 'tv'],
+                    'player_client': ['android_vr'],
                 },
                 'youtubepot-bgutilhttp': {
                     'base_url': ['http://127.0.0.1:4416']
